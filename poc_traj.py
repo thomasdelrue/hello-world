@@ -8,7 +8,7 @@ from sys import exit
 from vector2 import Vector2
 
 
-FPS = 30
+FPS = 4
 
 '''img = pygame.Surface((30, 30))
 pygame.draw.rect(img, (124, 0, 0), (6, 6, 16, 16), 1)
@@ -47,20 +47,40 @@ def bezier3(p0, p1, p2, p3):
     # calculate 20 points...
     bez_points = []
     
-    for i in range(0, 91):
-        t = i / 90
+    for i in range(0, 21):
+        t = i / 20
         x = (1 - t) ** 3 * p0.x + 3 * (1 - t) ** 2 * t * p1.x + 3 * (1 - t) * t ** 2 * p2.x + t ** 3 * p3.x
         y = (1 - t) ** 3 * p0.y + 3 * (1 - t) ** 2 * t * p1.y + 3 * (1 - t) * t ** 2 * p2.y + t ** 3 * p3.y
         bez_points.append(Vector2(int(x), int(y)))
     
     return bez_points
 
+	
+def bezier3(p0, p1, p2, p3, t):
+	x = (1 - t) ** 3 * p0.x + 3 * (1 - t) ** 2 * t * p1.x + 3 * (1 - t) * t ** 2 * p2.x + t ** 3 * p3.x
+	y = (1 - t) ** 3 * p0.y + 3 * (1 - t) ** 2 * t * p1.y + 3 * (1 - t) * t ** 2 * p2.y + t ** 3 * p3.y
+	return Vector2(int(x), int(y))
+	
 
+def findPoints(t0, t1, insertionIndex, pointList):
+	pass
+	
+	
+def findPoints():
+	pointList = []
+	lp0 = bezier3(p0, p1, p2, p3, 0)
+	lp1 = bezier3(p0, p1, p2, p3, 1)
+	
+	int pointsAdded = findPoints(0, 1, 1, pointList)
+	
+	assert(pointsAdded + 2 == len(pointList))
+	
+	
 pygame.init()
 screen = pygame.display.set_mode((500, 600), 0, 32)
 
-sprite_map = pygame.image.load('Reference_material\\galaga sprite map.png').convert_alpha()
-img = sprite_map.subsurface((20, 100, 20, 20))
+'''sprite_map = pygame.image.load('Reference_material\\galaga sprite map.png').convert_alpha()
+img = sprite_map.subsurface((20, 100, 20, 20))'''
 
 
 clock = pygame.time.Clock()
@@ -82,11 +102,13 @@ print(points)
 
 points.extend(bezier2(p0, p2, p1))'''
 
-points = bezier3(p0, p2, p1, p3)
+points.append(bezier3(p0, p2, p1, p3, 0))
+points.append(bezier3(p0, p2, p1, p3, 1))
+points.append(bezier3(p0, p2, p1, p3, .5))
 print(points)
 
-vo = Vector2(0, -10)
-v0 = None
+'''vo = Vector2(0, -10)
+v0 = None'''
 
 params = [p0, p1, p2, p3]
 
@@ -96,11 +118,11 @@ while True:
             exit()
             
     if len(points) > 0:
-        screen.fill((0, 0, 0))        
+        #screen.fill((0, 0, 0))        
         v1 = points.pop(0)
         pygame.gfxdraw.aacircle(screen, v1.x, v1.y, 2, RED) 
         
-        if v0:
+        '''if v0:
             rotation = Vector2.getAngle(vo, v1 - v0) 
             print(rotation)
             newImg = pygame.transform.rotate(img, -rotation).convert_alpha()
@@ -108,12 +130,12 @@ while True:
             
             screen.blit(newImg, imgPos)
         
-        v0 = v1 
-    else:
+        v0 = v1 '''
+    '''else:
         random.shuffle(params)
         print(params)
-        points = bezier3(*tuple(params))
-        v0 = None
+        points = bezier3(*tuple(params))'''
+        #v0 = None
 
     
     
