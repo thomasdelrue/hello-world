@@ -20,11 +20,12 @@ class Vector2(object):
 		self.x /= magnitude
 		self.y /= magnitude
 		
-		
-A = (10.0, 20.0)
-B = (30.0, 35.0)
-AB = Vector2.from_points(A, B)
-print("Vector AB is {}".format(AB))
-print("Magnitude of Vector AB is {}".format(AB.get_magnitude()))
-AB.normalize()
-print("Vector AB normalized is {}".format(AB))
+
+if __name__ == '__main__':		
+	A = (10.0, 20.0)
+	B = (30.0, 35.0)
+	AB = Vector2.from_points(A, B)
+	print("Vector AB is {}".format(AB))
+	print("Magnitude of Vector AB is {}".format(AB.get_magnitude()))
+	AB.normalize()
+	print("Vector AB normalized is {}".format(AB))
