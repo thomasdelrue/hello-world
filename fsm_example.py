@@ -1,3 +1,7 @@
+import pygame
+from pygame.locals import *
+from sys import exit
+
 from vector import Vector2
 
 
@@ -30,3 +34,51 @@ class GameEntity(object):
 			heading = vec_to_destination.normalize()
 			travel_distance = min(distance_to_destination, time_passed * self.speed)
 			self.location += travel_distance * heading
+			
+
+class World(object):
+	def __init__(self):
+		self.entities = {}
+		self.entity_id = 0 # Last entity id assigned
+		
+		self.background = pygame.surface.Surface(SCREEN_SIZE).convert()
+		self.background.fill((255, 255, 255))
+		pygme.draw.circle(self.background, (200, 255, 200), NEST_POSITION, int(NEST_SIZE))
+		
+	
+	def add_entity(self, entity):
+		self.entities[self.entity_id] = entity
+		entity.id = self.entity.id
+		self.entity_id += 1
+		
+	def remove_entity(self, entity):
+		del self.entities[entity.id]
+		
+	def get(self, entity_id):
+		if entity_id in self.entities:
+			return self.entities[entity_id]
+		else:
+			return None
+			
+	def process(self, time_passed):
+		time_passed_seconds = time_passed / 1000.0
+		for entity in self.entities.values():
+			entity.process(time_passed_seconds)
+			
+	def render(self, surface):
+		surface.blit(self.background, (0, 0))
+		for entity in self.entities.values():
+			entity.render(surface)
+			
+	def get_close_entity(self, name, location, range=100.):
+		location = Vector2(*location)
+		
+		for entity in self.entities.values():
+			if entity.name == name:
+				# might need changing into get_magnitude...
+				distance = location.get_distance_to(entity.location)
+				if distance < range:
+					return entity
+		return None
+	
+	
